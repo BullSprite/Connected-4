@@ -4,7 +4,9 @@
 
 class HumanPlayer : public Player{
 public:
-	HumanPlayer();
+	HumanPlayer(int);
+	int getPlayerType() override;
+	bool isHuman() override;
 }
 
 #endif // !_HUMAN_PLAYER_H

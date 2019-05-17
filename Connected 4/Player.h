@@ -1,13 +1,13 @@
 #ifndef _PHAYER_H
 #define _PLAYER_H
 
-enum playerType { HUMAN = 1, MINMAX };
-
 class Player {
 protected:
 	int player;
 public:
+	Player(int);
 	virtual int getPlayerType() = 0;
+	virtual bool isHuman() = 0;
 };
 
 #endif // !_PHAYER_H
