@@ -257,6 +257,6 @@ int* Field::operator[](const int & ind) {
 ostream& operator << (ostream& out, Field & field) {
 	for (int i = 0; i < 8; i++)
 		for (int j = 0; j < 7; j++)
-			out << field[i][j];
+			out << (field[i][j] == 1? "X" : field[i][j] == 2? "O" : " ");
 	out << endl;
 }

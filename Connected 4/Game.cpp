@@ -1,14 +1,29 @@
-#include "Game.h"
 #include "Project.h"
 
 Game::Game() {
+	setlocale(LC_ALL, "Rus");
 	run = true;
 }
 
 int Game::execute() {
 	HumanPlayer p1(1);
 	HumanPlayer p2(2);
-	while (run);
+	Field field;
+	while (run) {
+		while (field.getResult() == 0 && field.getTurns != 0) {
+			cout << "Введите ход игрока " << (((field.getTurns() % 2) == 0) ? "1" : "2") << ": ";
+			int turn;
+			cin >> turn;
+			field.setTurn(turn, ((field.getTurns() % 2) == 0) ? p1 : p2);
+		}
+		if (field.getResult() == MIN)
+			cout << "Победил игрок 1" << endl;
+		else if (field.getResult() == MAX)
+			cout << "Победил игрок 2" << endl;
+		else
+			cout << "Ничья" << endl;
+		run = false;
+	}
 	return 0;
 }
 

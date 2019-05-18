@@ -1,7 +1,7 @@
 #ifndef _FIELD_H
 #define _FIELD_H
 
-#include "Project.h"
+#include "Player.h"
 
 class Field {
 private:

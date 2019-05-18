@@ -6,6 +6,6 @@ class HumanPlayer : public Player{
 public:
 	HumanPlayer(int);
 	bool isHuman() override;
-}
+};
 
 #endif // !_HUMAN_PLAYER_H
