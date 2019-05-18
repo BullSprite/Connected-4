@@ -6,7 +6,7 @@ protected:
 	int player;
 public:
 	Player(int);
-	virtual int getPlayerType() = 0;
+	int getPlayerTurn();
 	virtual bool isHuman() = 0;
 };
 

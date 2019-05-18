@@ -7,10 +7,6 @@ int HumanPlayer::getPlayerType()
 	return 0;
 }
 
-int HumanPlayer::getPlayerType() {
-	return player;
-}
-
 bool HumanPlayer::isHuman() {
 	return true;
 }
