@@ -46,7 +46,7 @@ int Field::verticalStraight(const int & i1, const int & i2, Player & player) {
 		else
 			break;
 	if (straight == 4)
-		result = player.isHuman() ? MIN : MAX;
+		changeResult(player);
 	return straight;
 }
 
@@ -75,14 +75,14 @@ int * Field::horizontalStraight(const int & i1, const int & i2, Player & player)
 	}
 	straight++;
 	if (straight == 4)
-		result = result = player.isHuman() ? MIN : MAX;
+		changeResult(player);
 	else {
 		for (int i = i2 + 1; i < end; i++) {
 			if (field[i1][i] == p) {
 				if (spacesAfter == 0) {
 					straight++;
 					if (straight == 4) {
-						result = player.isHuman() ? MIN : MAX;
+						changeResult(player);
 						break;
 					}
 				}
@@ -143,7 +143,7 @@ int * Field::leftDiagonalStraight(const int & i1, const int & i2, Player & playe
 	}
 	straight++;
 	if (straight == 4)
-		result = result = player.isHuman() ? MIN : MAX;
+		changeResult(player);
 	else {
 		j = i2 + 1;
 		for (int i = i1 + 1; i < endI; i++) {
@@ -151,7 +151,7 @@ int * Field::leftDiagonalStraight(const int & i1, const int & i2, Player & playe
 				if (spacesAfter == 0) {
 					straight++;
 					if (straight == 4) {
-						result = player.isHuman() ? MIN : MAX;
+						changeResult(player);
 						break;
 					}
 				}
@@ -213,7 +213,7 @@ int * Field::rightDiagonalStraight(const int & i1, const int & i2, Player & play
 	}
 	straight++;
 	if (straight == 4)
-		result = result = player.isHuman() ? MIN : MAX;
+		changeResult(player);
 	else {
 		j = i2 - 1;
 		for (int i = i1 + 1; i < endI; i++) {
@@ -221,7 +221,7 @@ int * Field::rightDiagonalStraight(const int & i1, const int & i2, Player & play
 				if (spacesAfter == 0) {
 					straight++;
 					if (straight == 4) {
-						result = player.isHuman() ? MIN : MAX;
+						changeResult(player);
 						break;
 					}
 				}
@@ -259,6 +259,10 @@ void Field::setTurn(int j, Player & player) {
 	checkResult(i, j, player);
 }
 
+void Field::changeResult(Player & player) {
+	result = player.isHuman() ? MIN : MAX;
+}
+
 int* Field::operator[](const int & ind) {
 	return field[ind];
 }
@@ -276,5 +280,7 @@ ostream& operator << (ostream& out, Field & field) {
 	for (int i = 0; i < 7; i++)
 		out << i + 1 << " ";
 	out << endl;
+
 	return out;
 }
+

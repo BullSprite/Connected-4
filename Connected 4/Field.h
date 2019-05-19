@@ -25,6 +25,7 @@ public:
 	int getTurns();
 	void checkResult(const int &, const int &, Player &);
 	void setTurn(int, Player &);
+	void changeResult(Player &);
 
 	int* operator [](const int&);
 	friend ostream & operator << (ostream&, Field&);
