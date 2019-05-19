@@ -9,7 +9,8 @@ Game::Game() {
 int Game::execute() {
 	HumanPlayer p1(1);
 	AIPlayer p2(2);
-	p2.setMaxDepth(1);
+	int d = 3;
+	p2.setMaxDepth(d);
 	Field field;
 	while (run) {
 		int aiTurn = -1;
@@ -25,9 +26,9 @@ int Game::execute() {
 			}
 			else {
 				Player ** players = new Player*[2];
-				players[0] = &p1;
-				players[1] = &p2;
-				aiTurn = p2.runMiniMax(field, players, 1, 1);
+				players[1] = &p1;
+				players[0] = &p2;
+				aiTurn = p2.runMiniMax(field, players, 1, d);
 				field.setTurn(aiTurn, p2);
 			}
 
@@ -35,7 +36,7 @@ int Game::execute() {
 		cout << field;
 		if (field.getResult() == 0)
 			cout << "Ничья" << endl;
-		else if (field.getTurns() % 2 != 0)
+		else if (field.getResult() == MIN)
 			cout << "Победил игрок 1" << endl;
 		else 
 			cout << "Победил игрок 2" << endl;

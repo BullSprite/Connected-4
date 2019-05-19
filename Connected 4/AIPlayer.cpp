@@ -23,7 +23,7 @@ int AIPlayer::runMiniMax(Field & oldField, Player** players, const int & tPlayer
 
 	for (int i = 0; i < 7; i++) {
 		Field newField = oldField;
-		if (newField.checkTurnPossibility(i, *players[tPlayer])) {
+		if (newField.checkTurnPossibility(i)) {
 			newField.setTurn(i, *players[tPlayer]);
 			if (depth != 0) {
 				test = runMiniMax(newField, players, (tPlayer + 1) % 2, depth - 1);
@@ -32,7 +32,7 @@ int AIPlayer::runMiniMax(Field & oldField, Player** players, const int & tPlayer
 				test = getScore(newField, players);
 			}
 
-			if ((test < minMax && !players[tPlayer]->isHuman()) || (test > minMax && players[tPlayer]->isHuman())) {
+			if ((test > minMax && !players[tPlayer]->isHuman()) || (test < minMax && players[tPlayer]->isHuman())) {
 				minMax = test;
 				bestMoves.clear();
 				bestMoves.push_back(i);
@@ -43,15 +43,14 @@ int AIPlayer::runMiniMax(Field & oldField, Player** players, const int & tPlayer
 
 	srand(time(NULL));
 
-	if (bestMoves[0] == DEFAULT) {
-		bestMoves.clear();
-		for (int i = 0; i < 7; i++)
-			if (oldField.checkTurnPossibility(i, *players[tPlayer]))
-				bestMoves.push_back(i);
-		return bestMoves[rand() % bestMoves.size()];
-	}
-
 	if (depth == maxDepth) {
+		if (bestMoves[0] == DEFAULT) {
+			bestMoves.clear();
+			for (int i = 0; i < 7; i++)
+				if (oldField.checkTurnPossibility(i))
+					bestMoves.push_back(i);
+			return bestMoves[rand() % bestMoves.size()];
+		}
 		return bestMoves[rand() % bestMoves.size()];
 	}
 	return minMax;
@@ -74,15 +73,45 @@ int AIPlayer::getScore(Field & field, Player** p) {
 		int straight = 0, oppStraight = 0;
 
 		if (i < 5) {
-			tPlayer == player ? straight : oppStraight = field.verticalStraight(i, j, *p[tPlayer % 2]);
-			switch (straight)
+			(tPlayer == player ? straight : oppStraight) = field.verticalStraight(i, j, *p[tPlayer % 2]);
+			switch (tPlayer == player ? straight : oppStraight)
 			{
 			case 3: (tPlayer == player ? possible4 : oppPossible4)++; break;
 			case 2: if (i < 4) (tPlayer == player ? possible3 : oppPossible3)++; break;
 			case 1: if (i < 3) (tPlayer == player ? possible2 : oppPossible2)++; break;
 			}
 		}
-
+		for (; i > -1; i--) {
+			tPlayer = field[i][j];
+			tPlayer == player ? posScore : oppPosScore = 4 - abs(3 - j);
+			int * pos = field.horizontalStraight(i, j, *p[tPlayer % 2]);
+			switch (pos[1] + 1) {
+			case 3: if (pos[0] > 0) (tPlayer == player ? possible4 : oppPossible4)++;
+				if (pos[2] > 0) (tPlayer == player ? possible4 : oppPossible4)++; break;
+			case 2: if (pos[0] > 0) (tPlayer == player ? possible3 : oppPossible3)++;
+				if (pos[2] > 0) (tPlayer == player ? possible3 : oppPossible3)++; break;
+			case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
+				if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
+			}
+			pos = field.rightDiagonalStraight(i, j, *p[tPlayer % 2]);
+			switch (pos[1] + 1) {
+			case 3: if (pos[0] > 0) (tPlayer == player ? possible4 : oppPossible4)++;
+				if (pos[2] > 0) (tPlayer == player ? possible4 : oppPossible4)++; break;
+			case 2: if (pos[0] > 0) (tPlayer == player ? possible3 : oppPossible3)++;
+				if (pos[2] > 0) (tPlayer == player ? possible3 : oppPossible3)++; break;
+			case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
+				if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
+			}
+			pos = field.leftDiagonalStraight(i, j, *p[tPlayer % 2]);
+			switch (pos[1] + 1) {
+			case 3: if (pos[0] > 0) (tPlayer == player ? possible4 : oppPossible4)++;
+				if (pos[2] > 0) (tPlayer == player ? possible4 : oppPossible4)++; break;
+			case 2: if (pos[0] > 0) (tPlayer == player ? possible3 : oppPossible3)++;
+				if (pos[2] > 0) (tPlayer == player ? possible3 : oppPossible3)++; break;
+			case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
+				if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
+			}
+		}
 
 	}
 	return posScore + possible2 + possible3 * 4 + possible4 * 10 -

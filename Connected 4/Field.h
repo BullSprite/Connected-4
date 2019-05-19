@@ -20,7 +20,7 @@ public:
 	friend class AIPlayer;
 	Field();
 	Field(Field &);
-	bool checkTurnPossibility(int &, Player &);
+	bool checkTurnPossibility(int &);
 	int getResult();
 	int getTurns();
 	void checkResult(const int &, const int &, Player &);
