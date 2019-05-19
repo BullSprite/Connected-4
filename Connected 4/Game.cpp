@@ -19,12 +19,12 @@ int Game::execute() {
 			field.setTurn(--turn, ((field.getTurns() % 2) == 0) ? p1 : p2);
 		}
 		cout << field;
-		if (field.getResult() == MIN)
-			cout << "Победил игрок 1" << endl;
-		else if (field.getResult() == MAX)
-			cout << "Победил игрок 2" << endl;
-		else
+		if (field.getResult() == 0)
 			cout << "Ничья" << endl;
+		else if (field.getTurns() % 2 != 0)
+			cout << "Победил игрок 1" << endl;
+		else 
+			cout << "Победил игрок 2" << endl;
 		_getch();
 		exit();
 	}

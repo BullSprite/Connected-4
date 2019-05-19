@@ -40,8 +40,10 @@ int Field::verticalStraight(const int & i1, const int & i2, Player & player) {
 	int p = player.getPlayerTurn();
 	int straight = 0;
 	for (int i = i1; i > end; i--)
-		if (field[i1][i2] == p)
+		if (field[i][i2] == p)
 			straight++;
+		else
+			break;
 	if (straight == 4)
 		result = player.isHuman() ? MIN : MAX;
 	return straight;
@@ -71,24 +73,28 @@ int * Field::horizontalStraight(const int & i1, const int & i2, Player & player)
 		}
 	}
 	straight++;
-	for (int i = i2 + 1; i < end; i++) {
-		if (field[i1][i] == p) {
-			if (spacesAfter == 0) {
-				straight++;
-				if (straight == 4) {
-					result = player.isHuman() ? MIN : MAX;
+	if (straight == 4)
+		result = result = player.isHuman() ? MIN : MAX;
+	else {
+		for (int i = i2 + 1; i < end; i++) {
+			if (field[i1][i] == p) {
+				if (spacesAfter == 0) {
+					straight++;
+					if (straight == 4) {
+						result = player.isHuman() ? MIN : MAX;
+						break;
+					}
+				}
+				else {
 					break;
 				}
+			}
+			else if (field[i1][i] == 0) {
+				spacesAfter++;
 			}
 			else {
 				break;
 			}
-		}
-		else if (field[i1][i] == 0) {
-			spacesAfter++;
-		}
-		else {
-			break;
 		}
 	}
 	return new int[3]{ spacesBefore, sameBefore, spacesAfter };
@@ -135,27 +141,31 @@ int * Field::leftDiagonalStraight(const int & i1, const int & i2, Player & playe
 		j++;
 	}
 	straight++;
-	j = i2 + 1;
-	for (int i = i1 + 1; i < endI; i++) {
-		if (field[i][j] == p) {
-			if (spacesAfter == 0) {
-				straight++;
-				if (straight == 4) {
-					result = player.isHuman() ? MIN : MAX;
+	if (straight == 4)
+		result = result = player.isHuman() ? MIN : MAX;
+	else {
+		j = i2 + 1;
+		for (int i = i1 + 1; i < endI; i++) {
+			if (field[i][j] == p) {
+				if (spacesAfter == 0) {
+					straight++;
+					if (straight == 4) {
+						result = player.isHuman() ? MIN : MAX;
+						break;
+					}
+				}
+				else {
 					break;
 				}
+			}
+			else if (field[i][j] == 0) {
+				spacesAfter++;
 			}
 			else {
 				break;
 			}
+			j++;
 		}
-		else if (field[i][j] == 0) {
-			spacesAfter++;
-		}
-		else {
-			break;
-		}
-		j++;
 	}
 	return new int[3]{ spacesBefore, sameBefore, spacesAfter };
 }
@@ -175,7 +185,7 @@ int * Field::rightDiagonalStraight(const int & i1, const int & i2, Player & play
 	}
 	int startI = i1 - delta;
 	int startJ = i2 + delta;
-	if ((7 - i1) > i2) {
+	if ((7 - i1 + 4) < i2 - 4) {
 		delta = i1 + 4 > 7 ? 7 - i1 : 4;
 	}
 	else {
@@ -201,27 +211,31 @@ int * Field::rightDiagonalStraight(const int & i1, const int & i2, Player & play
 		j--;
 	}
 	straight++;
-	j = i2 - 1;
-	for (int i = i1 + 1; i < endI; i++) {
-		if (field[i][j] == p) {
-			if (spacesAfter == 0) {
-				straight++;
-				if (straight == 4) {
-					result = player.isHuman() ? MIN : MAX;
+	if (straight == 4)
+		result = result = player.isHuman() ? MIN : MAX;
+	else {
+		j = i2 - 1;
+		for (int i = i1 + 1; i < endI; i++) {
+			if (field[i][j] == p) {
+				if (spacesAfter == 0) {
+					straight++;
+					if (straight == 4) {
+						result = player.isHuman() ? MIN : MAX;
+						break;
+					}
+				}
+				else {
 					break;
 				}
+			}
+			else if (field[i][j] == 0) {
+				spacesAfter++;
 			}
 			else {
 				break;
 			}
+			j--;
 		}
-		else if (field[i][j] == 0) {
-			spacesAfter++;
-		}
-		else {
-			break;
-		}
-		j--;
 	}
 	return new int[3]{ spacesBefore, sameBefore, spacesAfter };
 }
