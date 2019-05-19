@@ -56,7 +56,7 @@ int * Field::horizontalStraight(const int & i1, const int & i2, Player & player)
 	int sameBefore = 0;
 	int spacesAfter = 0;
 	int start = i2 - 4 < 0 ? 0 : i2 - 4;
-	int end = i2 + 4 > 8 ? 8 : i2 + 4;
+	int end = i2 + 4 > 7 ? 7 : i2 + 4;
 	for (int i = start; i < i2; i++) {
 		if (field[i1][i] == p) {
 			sameBefore++;
@@ -107,7 +107,7 @@ int * Field::leftDiagonalStraight(const int & i1, const int & i2, Player & playe
 	int sameBefore = 0;
 	int spacesAfter = 0;
 	int delta = 0;
-	if (i1 < i2) {
+	if (i1-4 < i2 - 4) {
 		delta = i1 - 4 < 0 ? i1 : 4;
 	}
 	else {
