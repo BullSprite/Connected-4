@@ -1,5 +1,5 @@
-#include "Project.h"
-
+#include "Field.h"
+#include <conio.h>
 Field::Field() {
 	for (int i = 0; i < 6; i++)
 		for (int j = 0; j < 7; j++)
@@ -184,7 +184,7 @@ int * Field::rightDiagonalStraight(const int & i1, const int & i2, Player & play
 	int endI = i1 + delta;
 	int endJ = i2 - delta;
 	int j = startJ;
-	for (int i = startI; i > i1; i++) {
+	for (int i = startI; i < i1; i++) {
 		if (field[i][j] == p) {
 			sameBefore++;
 			straight++;
@@ -234,9 +234,9 @@ bool Field::checkTurnPossibility(int & turn, Player & player) {
 		possible = false;
 	if (!possible && player.isHuman()) {
 		cout << "¬веден некоректный ход, повторите попытку" << endl;
-		cout << "¬ведите номер столбца от 0 до 7: ";
+		cout << "¬ведите номер столбца от 1 до 7: ";
 		cin >> turn;
-		return checkTurnPossibility(turn, player);
+		return checkTurnPossibility(--turn, player);
 	}
 	return possible;
 }
@@ -244,7 +244,7 @@ bool Field::checkTurnPossibility(int & turn, Player & player) {
 void Field::setTurn(int & j, Player & player) {
 	checkTurnPossibility(j, player);
 	int i = 5;
-	while (field[i][j] == 0) i--;
+	while (field[i][j] == 0) i--; i++;
 	field[i][j] = player.getPlayerTurn();
 	checkResult(i, j, player);
 	turnsLimit--;
@@ -255,8 +255,17 @@ int* Field::operator[](const int & ind) {
 }
 
 ostream& operator << (ostream& out, Field & field) {
-	for (int i = 0; i < 8; i++)
+	system("CLS");
+	for (int i = 5; i > -1; i--) {
+		out << "***************" << endl << "*";
 		for (int j = 0; j < 7; j++)
-			out << (field[i][j] == 1? "X" : field[i][j] == 2? "O" : " ");
+			out << (field[i][j] == 1 ? "X" : field[i][j] == 2 ? "O" : " ") << "*";
+		out << "\t" << i + 1 << endl;
+	}
+
+	out << "***************" << endl << " ";
+	for (int i = 0; i < 7; i++)
+		out << i + 1 << " ";
 	out << endl;
+	return out;
 }

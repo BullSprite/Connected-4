@@ -1,7 +1,10 @@
 #ifndef _FIELD_H
 #define _FIELD_H
 
-#include "Player.h"
+#include "Project.h"
+#include <iostream>
+
+using namespace std;
 
 class Field {
 private:
@@ -23,6 +26,6 @@ public:
 	void setTurn(int &, Player &);
 
 	int* operator [](const int&);
-	friend ostream& operator << (ostream&, Field&);
+	friend ostream & operator << (ostream&, Field&);
 };
 #endif // !_FIELD_H
