@@ -4,12 +4,12 @@ Field::Field() {
 	for (int i = 0; i < 6; i++)
 		for (int j = 0; j < 7; j++)
 			field[i][j] = 0;
-	result = 0;
+	result = DEFAULT;
 	turnsLimit = 42;
 }
 
 Field::Field(Field & field) {
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 6; i++)
 		for (int j = 0; j < 8; j++)
 			this->field[i][j] = field[i][j];
 	result = field.getResult();
@@ -26,13 +26,14 @@ int Field::getResult() {
 
 void Field::checkResult(const int & i1, const int & i2, Player & player) {
 	verticalStraight(i1, i2, player);
-	if (result != 0) return;
+	if (result != DEFAULT) return;
 	horizontalStraight(i1, i2, player);
-	if (result != 0) return;
+	if (result != DEFAULT) return;
 	leftDiagonalStraight(i1, i2, player);
-	if (result != 0) return;
+	if (result != DEFAULT) return;
 	rightDiagonalStraight(i1, i2, player);
-	if (result != 0) return;
+	if (result != DEFAULT) return;
+	if (turnsLimit == 0) result = DRAW;
 }
 
 int Field::verticalStraight(const int & i1, const int & i2, Player & player) {
@@ -255,13 +256,13 @@ bool Field::checkTurnPossibility(int & turn, Player & player) {
 	return possible;
 }
 
-void Field::setTurn(int & j, Player & player) {
+void Field::setTurn(int j, Player & player) {
 	checkTurnPossibility(j, player);
 	int i = 5;
 	while (field[i][j] == 0) i--; i++;
 	field[i][j] = player.getPlayerTurn();
-	checkResult(i, j, player);
 	turnsLimit--;
+	checkResult(i, j, player);
 }
 
 int* Field::operator[](const int & ind) {
