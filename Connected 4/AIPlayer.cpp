@@ -3,7 +3,12 @@
 #include <cstdlib>
 #include <ctime>
 
-AIPlayer::AIPlayer(int playerType) : Player::Player(playerType) {}
+AIPlayer::AIPlayer(const int & playerType) : Player::Player(playerType) {}
+
+AIPlayer::AIPlayer(const int & playerType, const int & maxDepth) : Player::Player(playerType)
+{
+	this->maxDepth = maxDepth;
+}
 
 bool AIPlayer::isHuman() {
 	return false;
@@ -25,8 +30,8 @@ int AIPlayer::runMiniMax(Field & oldField, Player** players, const int & tPlayer
 		Field newField = oldField;
 		if (newField.checkTurnPossibility(i)) {
 			newField.setTurn(i, *players[tPlayer]);
-			if (depth != 0) {
-				test = runMiniMax(newField, players, (tPlayer + 1) % 2, depth - 1);
+			if (depth != maxDepth) {
+				test = runMiniMax(newField, players, (tPlayer + 1) % 2, depth + 1);
 			}
 			else {
 				test = getScore(newField, players);
@@ -43,7 +48,7 @@ int AIPlayer::runMiniMax(Field & oldField, Player** players, const int & tPlayer
 
 	srand(time(NULL));
 
-	if (depth == maxDepth) {
+	if (depth == 0) {
 		if (bestMoves[0] == DEFAULT) {
 			bestMoves.clear();
 			for (int i = 0; i < 7; i++)
@@ -93,7 +98,8 @@ int AIPlayer::getScore(Field & field, Player** p) {
 			case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
 				if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
 			}
-			pos = field.rightDiagonalStraight(i, j, *p[tPlayer % 2]);
+			delete(pos);
+			/*pos = field.rightDiagonalStraight(i, j, *p[tPlayer % 2]);
 			switch (pos[1] + 1) {
 			case 3: if (pos[0] > 0) (tPlayer == player ? possible4 : oppPossible4)++;
 				if (pos[2] > 0) (tPlayer == player ? possible4 : oppPossible4)++; break;
@@ -102,6 +108,7 @@ int AIPlayer::getScore(Field & field, Player** p) {
 			case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
 				if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
 			}
+			delete(pos);
 			pos = field.leftDiagonalStraight(i, j, *p[tPlayer % 2]);
 			switch (pos[1] + 1) {
 			case 3: if (pos[0] > 0) (tPlayer == player ? possible4 : oppPossible4)++;
@@ -111,6 +118,7 @@ int AIPlayer::getScore(Field & field, Player** p) {
 			case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
 				if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
 			}
+			delete(pos);*/
 		}
 
 	}

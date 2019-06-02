@@ -8,7 +8,8 @@ private:
 	int maxDepth;
 public:
 	friend class Field;
-	AIPlayer(int);
+	AIPlayer(const int &);
+	AIPlayer(const int &, const int &);
 	bool isHuman() override;
 	int runMiniMax(Field &, Player**, const int &, const int &);
 	int getScore(Field &, Player**);
