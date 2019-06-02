@@ -54,7 +54,6 @@ int AIPlayer::runMiniMax(Field & oldField, Player** players, const int & tPlayer
 			for (int i = 0; i < 7; i++)
 				if (oldField.checkTurnPossibility(i))
 					bestMoves.push_back(i);
-			return bestMoves[rand() % bestMoves.size()];
 		}
 		return bestMoves[rand() % bestMoves.size()];
 	}
@@ -81,47 +80,53 @@ int AIPlayer::getScore(Field & field, Player** p) {
 			(tPlayer == player ? straight : oppStraight) = field.verticalStraight(i, j, *p[tPlayer % 2]);
 			switch (tPlayer == player ? straight : oppStraight)
 			{
-			case 3: (tPlayer == player ? possible4 : oppPossible4)++; break;
-			case 2: if (i < 4) (tPlayer == player ? possible3 : oppPossible3)++; break;
-			case 1: if (i < 3) (tPlayer == player ? possible2 : oppPossible2)++; break;
+			case 2: (tPlayer == player ? possible4 : oppPossible4)++; break;
+			case 1: if (i < 4) (tPlayer == player ? possible3 : oppPossible3)++; break;
+			case 0: if (i < 3) (tPlayer == player ? possible2 : oppPossible2)++; break;
 			}
 		}
 		for (; i > -1; i--) {
 			tPlayer = field[i][j];
-			tPlayer == player ? posScore : oppPosScore = 4 - abs(3 - j);
+			(tPlayer == player ? posScore : oppPosScore) += 4 - abs(3 - j);
 			int * pos = field.horizontalStraight(i, j, *p[tPlayer % 2]);
-			switch (pos[1] + 1) {
-			case 3: if (pos[0] > 0) (tPlayer == player ? possible4 : oppPossible4)++;
-				if (pos[2] > 0) (tPlayer == player ? possible4 : oppPossible4)++; break;
-			case 2: if (pos[0] > 0) (tPlayer == player ? possible3 : oppPossible3)++;
-				if (pos[2] > 0) (tPlayer == player ? possible3 : oppPossible3)++; break;
-			case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
-				if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
+			if (pos[0] + pos[1] + pos[2] >= 4){
+				switch (pos[1] + 1) {
+				case 3: if (pos[0] > 0) (tPlayer == player ? possible4 : oppPossible4)++;
+					if (pos[2] > 0) (tPlayer == player ? possible4 : oppPossible4)++; break;
+				case 2: if (pos[0] > 0) (tPlayer == player ? possible3 : oppPossible3)++;
+					if (pos[2] > 0) (tPlayer == player ? possible3 : oppPossible3)++; break;
+				case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
+					if (pos[2] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
+				}
 			}
 			delete(pos);
-			/*pos = field.rightDiagonalStraight(i, j, *p[tPlayer % 2]);
-			switch (pos[1] + 1) {
-			case 3: if (pos[0] > 0) (tPlayer == player ? possible4 : oppPossible4)++;
-				if (pos[2] > 0) (tPlayer == player ? possible4 : oppPossible4)++; break;
-			case 2: if (pos[0] > 0) (tPlayer == player ? possible3 : oppPossible3)++;
-				if (pos[2] > 0) (tPlayer == player ? possible3 : oppPossible3)++; break;
-			case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
-				if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
+			pos = field.rightDiagonalStraight(i, j, *p[tPlayer % 2]);
+			if (pos[0] + pos[1] + pos[2] >= 4) {
+				switch (pos[1] + 1) {
+				case 3: if (pos[0] > 0) (tPlayer == player ? possible4 : oppPossible4)++;
+					if (pos[2] > 0) (tPlayer == player ? possible4 : oppPossible4)++; break;
+				case 2: if (pos[0] > 0) (tPlayer == player ? possible3 : oppPossible3)++;
+					if (pos[2] > 0) (tPlayer == player ? possible3 : oppPossible3)++; break;
+				case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
+					if (pos[2] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
+				}
 			}
 			delete(pos);
 			pos = field.leftDiagonalStraight(i, j, *p[tPlayer % 2]);
-			switch (pos[1] + 1) {
-			case 3: if (pos[0] > 0) (tPlayer == player ? possible4 : oppPossible4)++;
-				if (pos[2] > 0) (tPlayer == player ? possible4 : oppPossible4)++; break;
-			case 2: if (pos[0] > 0) (tPlayer == player ? possible3 : oppPossible3)++;
-				if (pos[2] > 0) (tPlayer == player ? possible3 : oppPossible3)++; break;
-			case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
-				if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
+			if (pos[0] + pos[1] + pos[2] >= 4) {
+				switch (pos[1] + 1) {
+				case 3: if (pos[0] > 0) (tPlayer == player ? possible4 : oppPossible4)++;
+					if (pos[2] > 0) (tPlayer == player ? possible4 : oppPossible4)++; break;
+				case 2: if (pos[0] > 0) (tPlayer == player ? possible3 : oppPossible3)++;
+					if (pos[2] > 0) (tPlayer == player ? possible3 : oppPossible3)++; break;
+				case 1: if (pos[0] > 0) (tPlayer == player ? possible2 : oppPossible2)++;
+					if (pos[2] > 0) (tPlayer == player ? possible2 : oppPossible2)++; break;
+				}
 			}
-			delete(pos);*/
+			delete(pos);
 		}
 
 	}
-	return posScore + possible2 + possible3 * 4 + possible4 * 10 -
-		(oppPosScore + oppPossible2 + oppPossible3 * 4 + oppPossible4 * 10);
+	return posScore + possible2 + possible3 * 5 + possible4 * 20 -
+		(oppPosScore + oppPossible2 + oppPossible3 * 5 + oppPossible4 * 20);
 }

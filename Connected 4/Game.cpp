@@ -3,15 +3,15 @@
 #include <string>
 
 int tryInputInt() {
-	int tmp = - 1000;
+	int tmp = -1000;
 	string t;
 	try {
 		getline(cin, t);
 		if (t.size() > 1 || t.size() < 0)
-			throw -1;
+			throw - 1;
 		tmp = t[0] - '0';
 		if (tmp < 0 || tmp > 9)
-			throw -1;
+			throw - 1;
 		return tmp;
 	}
 	catch (std::ios_base::failure &fail) {
@@ -91,7 +91,7 @@ int Game::execute() {
 			}
 			else {
 
-				pTurn = (static_cast<AIPlayer*>(players[t]))->runMiniMax(field, players, 1, 0);
+				pTurn = (static_cast<AIPlayer*>(players[t]))->runMiniMax(field, players, t, 0);
 				field.setTurn(pTurn, *players[t]);
 			}
 			t = !t;
@@ -99,15 +99,11 @@ int Game::execute() {
 
 		cout << field;
 
-		if (players[0]->isHuman() == players[1]->isHuman()) {
-			if (field.getResult() == DRAW)
-				cout << "Ничья" << endl;
-			else cout << "Победил игрок " << (*players[!t]).getPlayerTurn();
-			return 0;
-		}
-
 		if (field.getResult() == DRAW)
 			cout << "Ничья" << endl;
+		else if (players[0]->isHuman() == players[1]->isHuman()) {
+			cout << "Победил игрок " << (*players[!t]).getPlayerTurn();
+		}
 		else if (field.getResult() == MIN)
 			cout << "Победил игрок 1" << endl;
 		else

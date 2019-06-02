@@ -28,13 +28,13 @@ void Field::checkResult(const int & i1, const int & i2, Player & player) {
 	verticalStraight(i1, i2, player);
 	if (result != DEFAULT) return;
 	int * tmp = horizontalStraight(i1, i2, player);
-	delete[] tmp;
+	delete(tmp);
 	if (result != DEFAULT) return;
 	tmp = leftDiagonalStraight(i1, i2, player);
-	delete[] tmp;
+	delete(tmp);
 	if (result != DEFAULT) return;
 	tmp = rightDiagonalStraight(i1, i2, player);
-	delete[] tmp;
+	delete(tmp);
 	if (result != DEFAULT) return;
 	if (turnsLimit == 0) result = DRAW;
 }
@@ -59,7 +59,7 @@ int * Field::horizontalStraight(const int & i1, const int & i2, Player & player)
 	int spacesBefore = 0;
 	int sameBefore = 0;
 	int spacesAfter = 0;
-	int start = i2 - 4 < 0 ? 0 : i2 - 4;
+	int start = i2 - 3 < 0 ? 0 : i2 - 3;
 	int end = i2 + 4 > 7 ? 7 : i2 + 4;
 	for (int i = start; i < i2; i++) {
 		if (field[i1][i] == p) {
@@ -111,22 +111,16 @@ int * Field::leftDiagonalStraight(const int & i1, const int & i2, Player & playe
 	int sameBefore = 0;
 	int spacesAfter = 0;
 	int delta = 0;
-	if (i1-4 < i2 - 4) {
-		delta = i1 - 4 < 0 ? i1 : 4;
+	int step = 0;
+	int startI = i1, startJ = i2;
+	while (startI > 0 && startJ > 0 && step < 3) {
+		startI--; startJ--; step++;
 	}
-	else {
-		delta = i2 - 4 < 0 ? i2 : 4;
+	int endI = i1, endJ = i2;
+	step = 0;
+	while (endI < 5 && endJ < 6 && step < 3) {
+		endI++; endJ++; step++;
 	}
-	int startI = i1 - delta;
-	int startJ = i2 - delta;
-	if ((7 - i1) > (8 - i2)) {
-		delta = i1 + 4 > 7 ? 7 - i1 : 4;
-	}
-	else {
-		delta = i2 + 4 > 8 ? 8 - i2 : 4;
-	}
-	int endI = i1 + delta;
-	int endJ = i2 + delta;
 	int j = startJ;
 	for (int i = startI; i < i1; i++) {
 		if (field[i][j] == p) {
@@ -181,22 +175,16 @@ int * Field::rightDiagonalStraight(const int & i1, const int & i2, Player & play
 	int sameBefore = 0;
 	int spacesAfter = 0;
 	int delta = 0;
-	if (i1 < (7 - i2)) {
-		delta = i1 - 4 < 0 ? i1 : 4;
+	int step = 0;
+	int startI = i1, startJ = i2;
+	while (startI > 0 && startJ < 6 && step < 3) {
+		startI--; startJ++; step++;
 	}
-	else {
-		delta = i2 + 4 > 7 ? (7 - i2) : 4;
+	step = 0;
+	int endI = i1, endJ = i2;
+	while (endI < 5 && endJ > 0 && step < 3) {
+		endI++; endJ--; step++;
 	}
-	int startI = i1 - delta;
-	int startJ = i2 + delta;
-	if ((7 - i1 + 4) < i2 - 4) {
-		delta = i1 + 4 > 7 ? 7 - i1 : 4;
-	}
-	else {
-		delta = i2 - 4 < -1 ? -1 + i2 : 4;
-	}
-	int endI = i1 + delta;
-	int endJ = i2 - delta;
 	int j = startJ;
 	for (int i = startI; i < i1; i++) {
 		if (field[i][j] == p) {
